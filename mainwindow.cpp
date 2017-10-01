@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     arbolAVL = new AVLTree<User>();
+    mat = new Matriz();
 }
 
 MainWindow::~MainWindow()
@@ -16,7 +17,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    User u("Arnoldo","Lopez","12/10/98",8021,"12/10/2010","Admin","Es gordito","123");
+    /*User u("Arnoldo","Lopez","12/10/98",8021,"12/10/2010","Admin","Es gordito","123");
     arbolAVL->Insertar(u);
     cout<<"Insertado"<<endl;
     User u1("Arnoldo","Lopez","12/10/98",9021,"12/10/2010","Admin","Es gordito","123");
@@ -24,7 +25,11 @@ void MainWindow::on_pushButton_clicked()
     cout<<"Insertado"<<endl;
     User u2("Arnoldo","Lopez","12/10/98",9221,"12/10/2010","Admin","Es gordito","123");
     arbolAVL->Insertar(u2);
-    cout<<"Insertado"<<endl;
+    cout<<"Insertado"<<endl;*/
+
+    Teamwork tw("Prograamigos","Somos buenos","456231");
+    mat->h->add("Prograamigos","Somos buenos","456231");
     cout<<"Fin";
+    cout<<"otra cosa";
     //asd;
 }

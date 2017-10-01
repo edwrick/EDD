@@ -3,6 +3,10 @@
 
 User::User(){}
 
+User::User(int code){
+    this->cod=code;
+}
+
 User::User(QString nombre,QString apellido,QString fecha,int cod,QString fechaC,QString rol,QString anota,QString pswd)
 {
     this->nombre = nombre;

@@ -5,11 +5,11 @@ class User
 {
 public:
     User();
+    User(int code);
     User(QString nombre,QString apellido,QString fecha,int cod,QString fechaC,QString rol,QString anota,QString pswd);
     QString getRol();
     int getCod();
     int compare(User another);
-
     QString nombre;
     QString apellido;
     QString fecha;

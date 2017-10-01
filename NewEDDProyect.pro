@@ -26,13 +26,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    user.cpp
+    user.cpp \
+    proyect.cpp \
+    teamwork.cpp \
+    activity.cpp
 
 HEADERS += \
         mainwindow.h \
     avltree.h \
     nodoavl.h \
-    user.h
+    user.h \
+    nodoorto.h \
+    nodoheader.h \
+    listav.h \
+    listah.h \
+    nodolate.h \
+    headers.h \
+    laterales.h \
+    matriz.h \
+    simplelist.h \
+    node.h \
+    proyect.h \
+    teamwork.h \
+    activity.h
 
 FORMS += \
         mainwindow.ui
