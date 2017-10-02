@@ -29,7 +29,8 @@ SOURCES += \
     user.cpp \
     proyect.cpp \
     teamwork.cpp \
-    activity.cpp
+    activity.cpp \
+    login.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,9 @@ HEADERS += \
     node.h \
     proyect.h \
     teamwork.h \
-    activity.h
+    activity.h \
+    login.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    login.ui

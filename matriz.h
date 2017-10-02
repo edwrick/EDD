@@ -24,6 +24,12 @@ public:
         cout<<"Dato insertado en pos: "<<x<<","<<y<<endl;
     }
 
+    NodoOrto* search(int x,int y){
+        NodoHeader* tempH;
+        tempH = h->search(x);
+        NodoOrto* temp = tempH->column->get(y);
+        return tempH->column->get(y);
+    }
 
     void fill(int x, int y){
         int d=0;

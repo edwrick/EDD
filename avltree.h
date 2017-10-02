@@ -45,7 +45,7 @@ public:
 
        NodoAVL<T> *padre  = nullptr;
        User u = dat;
-       cout << "Insertar: " << u.cod << endl;
+       //cout << "Insertar: " << u.cod << endl;
        User actualdata;
        User padredata;
        actual = raiz;

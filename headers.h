@@ -92,6 +92,7 @@ public:
             first=last= nodo;
         }else{
             nodo = new NodoHeader(size,nombre,desc,code);
+            nodo->ant = last;
             last->next = nodo;
             last = nodo;
         }

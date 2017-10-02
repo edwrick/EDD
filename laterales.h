@@ -26,6 +26,7 @@ public:
             first=last= nodo;
         }else{
             nodo = new NodoLat(size,title,desc,fechaini,fechaEnd,estado,lider);
+            nodo->ant = last;
             last->next = nodo;
             last = nodo;
         }

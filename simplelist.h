@@ -32,7 +32,7 @@ public:
     /*
      * Inserta un nuevo nodo al inicio de la lista
      */
-    void add(QString title,QString desc,QString fechaE,QString prioridad,QString estado,int usercode) {
+    void add(QString title,QString desc,QString fechaE,QString prioridad,QString estado,QString usercode) {
         NodoS *theNew = new NodoS(title,desc,fechaE,prioridad,estado,usercode);
         if(first==nullptr){
             qInfo() << "Primer elemento de la lista";
@@ -49,7 +49,22 @@ public:
         size++;
     }
 
-
+    void addUserCode(QString usercode) {
+        NodoS *theNew = new NodoS(usercode);
+        if(first==nullptr){
+            qInfo() << "Primer elemento de la lista";
+            first = theNew;
+            size++;
+            return;
+        }else{
+            NodoS *temp=first;
+            while(temp->next!=NULL){
+                temp = temp->next;
+            }
+            temp->next = theNew;
+        }
+        size++;
+    }
 
     /*
      * Recorre la lista, imprimiendo sus valores en consola

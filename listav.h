@@ -24,6 +24,23 @@ public:
         return false;
     }
 
+    NodoOrto* get(int y){
+        if(!Vacia()){
+            NodoOrto* aux=first;
+            while(aux->abajo!=NULL){
+                if(aux->y==y){
+                    return aux;
+                }
+                aux= aux->abajo;
+            }
+            if(aux->y==y){
+                return aux;
+            }
+        }
+        cout<< "Nodo ortogonal inexistente";
+        return NULL;
+    }
+
     void add(NodoOrto *nodo){
         if(Vacia()){
             first=last= nodo;

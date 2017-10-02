@@ -7,7 +7,7 @@ public:
     /*
      * Constructor de la clase MyNode
      */
-    NodoS(QString title,QString desc,QString fechaE,QString prioridad,QString estado,int usercode) {
+    NodoS(QString title,QString desc,QString fechaE,QString prioridad,QString estado,QString usercode) {
         this->title = title;
         this->desc = desc;
         this->fechaE = fechaE;
@@ -17,6 +17,10 @@ public:
         this->next = nullptr;
     }
 
+    NodoS(QString usercode){
+        this->next=nullptr;
+        this->usercode=usercode;
+    }
     /*
      * Metodo para obtener el valor del nodo
      */
@@ -43,7 +47,7 @@ public:
 private:
     // Valor
     QString title,desc,fechaE,prioridad,estado;
-    int usercode;
+    QString usercode;
 
 };
 #endif // NODE_H
