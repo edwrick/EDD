@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setGeometry(80,80,745,500);
     ui->tableWidget->setRowCount(5);
     ui->tableWidget->setColumnCount(5);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
@@ -29,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setVisible(false);
     ui->tableWidget->setShowGrid(false);
     ui->tableWidget->setRowCount(15);
+    ui->twFrame->setVisible(false);
+    ui->dbFrame->setGeometry(10,50,731,371);
+    ui->dbFrame->setVisible(true);
     /*model->setHorizontalHeaderItem(0, new QStandardItem(QString("Column1 Header")));
     model->setHorizontalHeaderItem(1, new QStandardItem(QString("Column2 Header")));
     model->setHorizontalHeaderItem(2, new QStandardItem(QString("Column3 Header")));
@@ -177,4 +181,70 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
     ui->tableWidget->setItem(2,2,new QTableWidgetItem("amigos"));
+}
+
+void MainWindow::on_pushButton_9_clicked()
+{
+    ui->jsonframe->setVisible(false);
+    ui->dbFrame->setGeometry(10,50,731,371);
+    ui->dbFrame->setVisible(true);
+    ui->userFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+}
+
+void MainWindow::on_pushButton_10_clicked()
+{
+    ui->jsonframe->setGeometry(10,120,731,111);
+    ui->dbFrame->setVisible(false);
+    ui->jsonframe->setVisible(true);
+    ui->userFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+}
+
+void MainWindow::on_pushButton_11_clicked()
+{
+    ui->actFrame->setGeometry(10,50,731,371);
+    ui->actFrame->setVisible(true);
+    ui->dbFrame->setVisible(false);
+    ui->jsonframe->setVisible(false);
+    ui->userFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+}
+
+void MainWindow::on_pushButton_13_clicked()
+{
+    ui->userFrame->setGeometry(100,50,511,401);
+    ui->userFrame->setVisible(true);
+    ui->jsonframe->setVisible(false);
+    ui->dbFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+}
+
+void MainWindow::on_pushButton_12_clicked()
+{
+    ui->proFrame->setGeometry(50,50,651,401);
+    ui->proFrame->setVisible(true);
+    ui->userFrame->setVisible(false);
+    ui->jsonframe->setVisible(false);
+    ui->dbFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+}
+
+void MainWindow::on_pushButton_14_clicked()
+{
+    ui->twFrame->setGeometry(120,50,491,391);
+    ui->twFrame->setVisible(true);
+    ui->proFrame->setVisible(false);
+    ui->userFrame->setVisible(false);
+    ui->jsonframe->setVisible(false);
+    ui->dbFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
 }
