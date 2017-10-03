@@ -24,11 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QTableWidgetItem * protoitem = new QTableWidgetItem("asd");
      protoitem->setTextAlignment(Qt::AlignCenter);
     ui->tableWidget->setItemPrototype(protoitem);
-    ui->tableWidget->setItem(0,0,protoitem);
-    ui->tableWidget->setItem(0,1,new QTableWidgetItem("Hello 2"));
+    //ui->tableWidget->setItem(0,0,protoitem);
+    //ui->tableWidget->setItem(0,1,new QTableWidgetItem("Hello 2"));
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->horizontalHeader()->setVisible(false);
     ui->tableWidget->setShowGrid(false);
+    ui->tableWidget->setColumnWidth(0,500);
+    ui->tableWidget->setColumnWidth(1,500);
     ui->tableWidget->setRowCount(15);
     ui->twFrame->setVisible(false);
     ui->dbFrame->setGeometry(10,50,731,371);
@@ -45,6 +47,48 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::loadDash(){
+    int c = mat->l->size;
+    for(int i=0; i<c;i++){
+        QTableWidgetItem *it=new QTableWidgetItem(mat->l->getTitle(i));
+        it->setForeground(QBrush(QColor("#be8019")));
+         it->setTextAlignment(Qt::AlignCenter);
+         ui->tableWidget->setItem(i+1,0,it);
+         QFont font = ui->tableWidget->item(i+1,0)->font();
+         font.setBold(true);
+         font.setOverline(true);
+         //font.setUnderline(true);
+         ui->tableWidget->item(i+1,0)->setFont( font );
+    }
+
+    int z = mat->h->size;
+    for(int i=0; i<z;i++){
+        QTableWidgetItem *it=new QTableWidgetItem(mat->h->getName(i));
+        it->setForeground(QBrush(QColor("#2d1f1a")));
+         it->setTextAlignment(Qt::AlignCenter);
+         ui->tableWidget->setItem(0,i+1,it);
+         QFont font = ui->tableWidget->item(0,i+1)->font();
+         font.setBold(true);
+         font.setOverline(true);
+         //font.setUnderline(true);
+         ui->tableWidget->item(0,i+1)->setFont( font );
+    }
+
+    for(int i=0;i<z;i++){
+        int columnsize = mat->h->search(i)->column->size;
+        for(int j=0;j<columnsize;j++){
+            NodoOrto* temp;
+            temp = mat->h->search(i)->column->searchByPos(j);
+            int x= temp->x;
+            int y = temp->y;
+            QString title = "Tarea con "+ QString::number(temp->listita->size) +" acti";
+            QTableWidgetItem *iti = new QTableWidgetItem(title);
+            ui->tableWidget->setItem(y+1,x+1,iti);
+        }
+    }
+
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -192,6 +236,7 @@ void MainWindow::on_pushButton_9_clicked()
     ui->actFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    loadDash();
 }
 
 void MainWindow::on_pushButton_10_clicked()

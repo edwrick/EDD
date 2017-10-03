@@ -76,9 +76,9 @@ public:
             aux = aux->next;
         }
     }
-
+int size;
 private:
     NodoS *first;
-    int size;
+
 };
 #endif // SIMPLELIST_H

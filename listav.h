@@ -41,6 +41,18 @@ public:
         return NULL;
     }
 
+    NodoOrto* searchByPos(int no){
+        if(!Vacia()){
+            NodoOrto* aux=first;
+            for(int i=0;i<no;i++){
+                aux = aux->abajo;
+            }
+            return aux;
+        }
+        cout<<"Lista vacia";
+        return NULL;
+    }
+
     void add(NodoOrto *nodo){
         if(Vacia()){
             first=last= nodo;
@@ -91,11 +103,11 @@ public:
         }
         }
     }
-
+int size;
 private:
     NodoOrto *first;
     NodoOrto *last;
-    int size;
+
 };
 
 #endif // LISTAV_H

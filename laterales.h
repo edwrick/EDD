@@ -131,6 +131,18 @@ public:
             return NULL ;
         }
     }
+    QString getTitle(int y){
+        if(exists(y)){
+            NodoLat* temp;
+            temp = first;
+            while(temp->y != y){
+                temp = temp->next;
+            }
+            return temp->title;
+        }else{
+            return "inexistente";
+        }
+    }
 
     NodoLat *first;
     NodoLat *last;

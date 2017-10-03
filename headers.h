@@ -124,6 +124,18 @@ public:
         nodo->ant = temp1;
         nodo->next = temp2;
     }*/
+    QString getName(int x){
+        if(exists(x)){
+            NodoHeader* temp;
+            temp = first;
+            while(temp->x != x){
+                temp = temp->next;
+            }
+            return temp->nombre;
+        }else{
+            return "inexistente";
+        }
+    }
 
     void recorrer(){
         if(!Vacia()){
@@ -134,9 +146,10 @@ public:
         }
         }
     }
+    int size;
 private:
     NodoHeader *first;
     NodoHeader *last;
-    int size;
+
 };
 #endif // HEADERS_H
