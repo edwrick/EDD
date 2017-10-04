@@ -43,11 +43,11 @@ public:
 
     // Apuntador al siguiente nodo
     NodoS *next;
-
+    QString usercode;
 private:
     // Valor
     QString title,desc,fechaE,prioridad,estado;
-    QString usercode;
+
 
 };
 #endif // NODE_H

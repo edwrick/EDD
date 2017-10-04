@@ -26,6 +26,8 @@ private slots:
     void cargarJsonPro();
     void cargarJsonTW();
     void loadDash();
+    void loadTw();
+    void loadPro();
     void on_pushButton_2_clicked();
 
     void on_pushButton_3_clicked();
@@ -45,6 +47,16 @@ private slots:
     void on_pushButton_12_clicked();
 
     void on_pushButton_14_clicked();
+
+    void on_btnSaveTW_clicked();
+
+    void on_twCB_currentIndexChanged(int index);
+
+    void on_proProCB_activated(const QString &arg1);
+
+    void on_proProCB_currentIndexChanged(const QString &arg1);
+
+    void on_proProCB_currentIndexChanged(int index);
 
 private:
 

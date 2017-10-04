@@ -84,6 +84,32 @@ public:
             return NULL ;
         }
     }
+    NodoHeader* searchByPos(int x){
+        if(!Vacia()){
+            NodoHeader* temp;
+            temp = first;
+            for(int i=0;i<x;i++){
+                temp = temp->next;
+            }
+            return temp;
+        }else{
+            return NULL;
+        }
+    }
+
+    NodoHeader* getNodeByTitle(QString title){
+        if(existsWTitle(title)){
+            NodoHeader* temp;
+            temp = first;
+            while(temp->getNombre()!= title){
+                temp = temp->next;
+
+            }
+            return temp;
+        }else{
+            return NULL ;
+        }
+    }
 
     void add(QString nombre, QString desc, QString code){
         NodoHeader *nodo;
@@ -129,6 +155,19 @@ public:
             NodoHeader* temp;
             temp = first;
             while(temp->x != x){
+                temp = temp->next;
+            }
+            return temp->nombre;
+        }else{
+            return "inexistente";
+        }
+    }
+
+    QString getNameByPos(int x){
+        if(!Vacia()){
+            NodoHeader* temp;
+            temp = first;
+            for(int i=0;i<x;i++){
                 temp = temp->next;
             }
             return temp->nombre;

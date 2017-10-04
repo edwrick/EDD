@@ -91,6 +91,22 @@ void MainWindow::loadDash(){
 
 }
 
+void MainWindow::loadTw(){
+    ui->twCB->clear();
+    int longi = mat->h->size;
+    for(int i=0;i<longi;i++){
+        ui->twCB->addItem(mat->h->getNameByPos(i));
+    }
+}
+
+void MainWindow::loadPro(){
+    ui->proProCB->clear();
+    int longi = mat->l->size;
+    for(int i=0;i<longi;i++){
+        ui->proProCB->addItem(mat->l->getNameByPos(i));
+    }
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     /*User u("Arnoldo","Lopez","12/10/98",8021,"12/10/2010","Admin","Es gordito","123");
@@ -207,6 +223,8 @@ void MainWindow::cargarJsonAct(){
     string s;
 }
 
+
+
 void MainWindow::on_pushButton_2_clicked()
 {
     cargarJsonContacts();
@@ -281,6 +299,7 @@ void MainWindow::on_pushButton_12_clicked()
     ui->dbFrame->setVisible(false);
     ui->actFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    loadPro();
 }
 
 void MainWindow::on_pushButton_14_clicked()
@@ -292,4 +311,50 @@ void MainWindow::on_pushButton_14_clicked()
     ui->jsonframe->setVisible(false);
     ui->dbFrame->setVisible(false);
     ui->actFrame->setVisible(false);
+    loadTw();
 }
+
+void MainWindow::on_btnSaveTW_clicked()
+{
+
+}
+
+void MainWindow::on_twCB_currentIndexChanged(int index)
+{
+    ui->listMembersTW->clear();
+    cout<< "index ahora es: " << index <<endl;
+    if(index>=1){
+    NodoHeader* temp = mat->h->getNodeByTitle(ui->twCB->itemText(index));
+    ui->txtTWname->setText(temp->getNombre());
+    ui->txtDescTW->setText(temp->desc);
+    ui->txtEspTW->setText(temp->code);
+    int longi = temp->listita->size;
+    for(int i=0;i<longi;i++){
+        ui->listMembersTW->addItem(temp->listita->getCodeByPos(i));
+    }
+    }
+}
+
+void MainWindow::on_proProCB_activated(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_proProCB_currentIndexChanged(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_proProCB_currentIndexChanged(int index)
+{
+    cout<< "index ahora es: " << index <<endl;
+    if(index>=0){
+    NodoLat* temp = mat->l->getNodeByTitle(ui->proProCB->itemText(index));
+    ui->txtTitlePro->setText(temp->getTitle());
+    ui->txtDescPro->setText(temp->desc);
+    ui->txtIniPro->setText(temp->fechaini);
+    ui->txtFinPro->setText(temp->fechaEnd);
+    ui->txtEstadoPro->setText(temp->estado);
+    ui->txtLiderPro->setText(temp->lider);
+}
+    }

@@ -29,6 +29,13 @@ public:
         size = 0;
     }
 
+
+
+    bool Vacia(){
+        if (first) return false;
+
+        return true;
+    }
     /*
      * Inserta un nuevo nodo al inicio de la lista
      */
@@ -64,6 +71,20 @@ public:
             temp->next = theNew;
         }
         size++;
+    }
+
+
+    QString getCodeByPos(int x){
+        if(!Vacia()){
+            NodoS* temp;
+            temp = first;
+            for(int i=0;i<x;i++){
+                temp = temp->next;
+            }
+            return temp->usercode;
+        }else{
+            return "inexistente";
+        }
     }
 
     /*

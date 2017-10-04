@@ -19,6 +19,32 @@ public:
         return false;
     }
 
+    QString getNameByPos(int x){
+        if(!Vacia()){
+            NodoLat* temp;
+            temp = first;
+            for(int i=0;i<x;i++){
+                temp = temp->next;
+            }
+            return temp->title;
+        }else{
+            return "inexistente";
+        }
+    }
+
+    NodoLat* getNodeByTitle(QString title){
+        if(existsWTitle(title)){
+            NodoLat* temp;
+            temp = first;
+            while(temp->getTitle()!= title){
+                temp = temp->next;
+
+            }
+            return temp;
+        }else{
+            return NULL ;
+        }
+    }
     void add(QString title,QString desc,QString fechaini,QString fechaEnd,QString estado,QString lider){
         NodoLat *nodo;
         if(Vacia()){
