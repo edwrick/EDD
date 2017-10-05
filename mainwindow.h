@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void drawPDF();
     void on_pushButton_clicked();
     void cargarJsonContacts();
     void cargarJsonAct();
@@ -69,6 +70,8 @@ private slots:
     void on_twActCB_currentIndexChanged(int index);
 
     void on_actList_activated(const QModelIndex &index);
+
+    void on_btnPDFUser_clicked();
 
 private:
     NodoOrto* nodito;

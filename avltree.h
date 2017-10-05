@@ -4,6 +4,11 @@
 #include "user.h"
 #include <QtDebug>
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <stdlib.h>
+#include<stdio.h>
+#include <sstream>
 using namespace std;
 template <typename T> //Definicion del tipo generico T (template en C++)
 class AVLTree
@@ -362,6 +367,54 @@ public:
        User nu("null");
        return nu; // No est� en �rbol
     }
+
+    void graphAVL(NodoAVL<T>* padre)
+    {
+        if(padre){
+        if(padre->izquierdo && padre->derecho){
+            User udata= padre->dato;
+            User uder = padre->derecho->dato;
+            User uiz = padre->izquierdo->dato;
+            texto+="\""+udata.cod+"\" -> \""+uiz.cod+"\";\n";
+            texto+="\""+udata.cod+"\" -> \""+uder.cod+"\";\n";
+            graphAVL(padre->izquierdo);
+            graphAVL(padre->derecho);
+        }else{
+            if(padre->izquierdo){
+                User udata= padre->dato;
+                User uiz = padre->izquierdo->dato;
+                texto+="\""+udata.cod+"\" -> \""+uiz.cod+"\";\n";
+                graphAVL(padre->izquierdo);
+            }
+            if(padre->derecho){
+                User udata= padre->dato;
+                User uder = padre->derecho->dato;
+                texto+="\""+udata.cod+"\" -> \""+uder.cod+"\";\n";
+                graphAVL(padre->derecho);
+            }
+        }
+
+        }
+    }
+        void pruebaGraph(){
+
+        qDebug()<<"\nGenerar grafica: ";
+        if(raiz!=NULL){
+           graphAVL(raiz);
+        }
+        texto+="\n }";
+        string text = texto.toStdString();
+        ofstream outputFile;
+        outputFile.open("textograph.txt");
+        outputFile <<text <<endl;
+        outputFile.close();
+        qDebug()<<"\n Archivo generado.\n";
+        system("dot -Tpng textograph.txt -o graphBiblio.png");
+
+
+        //--------------------------
+        }
+
     User getUserData(NodoAVL<T>* padre,QString code,bool search){
 
         if(hasChildren(padre->izquierdo)) getUserData(padre->izquierdo,code,search);
@@ -398,6 +451,7 @@ public:
     QString contacts;
     int size=0;
     NodoAVL<T> *raiz;
+    QString texto="digraph G{ rankdir= \"LR\" \n";
 private:
     enum {IZQUIERDO, DERECHO};
     // Punteros de la lista, para cabeza y nodo actual:

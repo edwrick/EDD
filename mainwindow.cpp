@@ -8,6 +8,11 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QStandardItemModel>
+#include <QtPrintSupport/QPrinter>
+#include <QPaintEngineState>
+#include <QPainter>
+#include<QPdfWriter>
+#include <QPicture>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -121,11 +126,14 @@ void MainWindow::loadPro(){
 
 void MainWindow::loadUsers(){
     ui->userCB->clear();
-    QList<QString> users = arbolAVL->getContactList();
-    for(int i=0;i<users.size();i++){
-        ui->userCB->addItem(users[i]);
-        ui->reportUserCB->addItem(users[i]);
+    if(!arbolAVL->Vacio(arbolAVL->raiz)){
+        QList<QString> users = arbolAVL->getContactList();
+        for(int i=0;i<users.size();i++){
+            ui->userCB->addItem(users[i]);
+            ui->reportUserCB->addItem(users[i]);
+        }
     }
+
 }
 
 void MainWindow::loadAct(){
@@ -456,10 +464,50 @@ void MainWindow::on_proProCB_currentIndexChanged(const QString &arg1)
 
 void MainWindow::on_btnGraphAVL_clicked()
 {
-
+arbolAVL->pruebaGraph();
 }
 
-
+void MainWindow::drawPDF(){
+    User u = arbolAVL->Buscar(ui->reportUserCB->itemText(ui->reportUserCB->currentIndex()));
+    int c=0;
+    QPdfWriter pdf("ReporteUsuario.pdf");
+    QPainter painter(&pdf);
+    //code for drawing a line
+    QPicture pi;
+    QPainter p(&pi);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.drawLine(0, 20, 500, 20);
+    p.end();
+    //end of line drawing
+    QString nombre = u.nombre +" "+u.apellido;
+    painter.drawText(10,10,nombre);
+    painter.drawText(10,210,u.cod);
+    painter.drawPicture(10,80,pi); //adding the line
+    for(int i=0;i<mat->h->size;i++){
+        NodoHeader* aux = mat->h->searchByPos(i);
+        for(int j=0;j<aux->column->size;j++){
+             NodoOrto *temp = aux->column->searchByPos(j);
+             for(int z=0;z<temp->listita->size;z++){
+                 NodoS* act= temp->listita->getNodeByPos(z);
+                 if(act->usercode==u.cod){
+                     NodoLat* pro = mat->l->search(temp->y);
+                     QString total = "Actividad "+ QString::number(c+1);
+                     painter.drawText(10,(c+3)*210+(c*600),total);
+                     painter.drawText(10,(c+3)*280+(c*520),pro->title);
+                     painter.drawText(10,(c+3)*350+(c*440),act->desc);
+                     QPicture pic;
+                     QPainter l(&pic);
+                     l.setRenderHint(QPainter::Antialiasing);
+                     l.drawLine(0, 20, 180, 20);
+                     l.end();
+                     painter.drawPicture(10,(c+3)*300+(c*520),pic);
+                     c++;
+                 }
+             }
+        }
+    }
+    painter.end();
+}
 
 
 
@@ -486,4 +534,9 @@ void MainWindow::on_actList_activated(const QModelIndex &index)
     if(act->estado =="finalizada") ui->estadoActCB->setCurrentIndex(3);
     if(act->estado =="cancelada") ui->estadoActCB->setCurrentIndex(4);
     cout <<"error";
+}
+
+void MainWindow::on_btnPDFUser_clicked()
+{
+    drawPDF();
 }
