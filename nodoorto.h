@@ -9,6 +9,7 @@ public:
     /*
      * Constructor de la clase MyNode
      */
+    NodoOrto(){}
     NodoOrto(QString name,int x,int y) {
         this->name=name;
         this->x=x;

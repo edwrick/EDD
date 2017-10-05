@@ -85,6 +85,7 @@ public:
           padre->derecho = new NodoAVL<T>(dat, padre);
           Equilibrar(padre, DERECHO, true);
        }
+       size++;
     }
     void Equilibrar(NodoAVL<T> *nodo, int rama, bool nuevo)
     {
@@ -314,11 +315,95 @@ public:
        }
     }
 
+    QList<QString> getContactList(){
+        NodoAVL<T>* dad= raiz;
+        QString contacts = getChildren(dad);
+        QList<QString> lista = contacts.split(',');
+        return lista;
+
+    }
+
+    QString getChildren(NodoAVL<T>* padre){
+
+        if(hasChildren(padre->izquierdo)) getChildren(padre->izquierdo);
+        if(hasChildren(padre->derecho)) getChildren(padre->derecho);
+
+        if(padre->izquierdo){
+            User u = padre->izquierdo->getDato();
+            contacts+= u.cod +",";
+        }
+        if(padre->derecho){
+            User u = padre->derecho->getDato();
+            contacts+= u.cod +",";
+        }
+        if(padre==raiz){
+            User u = padre->getDato();
+            contacts+= u.cod;
+        }
+        return contacts;
+    }
+
+    bool hasChildren(NodoAVL<T>* padre){
+        if(padre){
+        if(padre->izquierdo || padre->derecho) return true;
+        }
+        return false;
+    }
+    User Buscar(QString code)
+    {
+       actual = raiz;
+       // Todav�a puede aparecer, ya que quedan nodos por mirar
+       while(!Vacio(actual)) {
+          us = actual->dato;
+          if(code == us.cod) return us; // dato encontrado
+          else if(code > us.cod) actual = actual->derecho; // Seguir
+          else if(code < us.cod) actual = actual->izquierdo;
+       }
+       User nu("null");
+       return nu; // No est� en �rbol
+    }
+    User getUserData(NodoAVL<T>* padre,QString code,bool search){
+
+        if(hasChildren(padre->izquierdo)) getUserData(padre->izquierdo,code,search);
+        if(hasChildren(padre->derecho)) getUserData(padre->derecho,code,search);
+        if(search) us = padre->dato;
+        if(padre->izquierdo && search){
+            us = padre->izquierdo->getDato();
+            if(us.cod==code){
+                search=false;
+                return padre->izquierdo->getDato();
+            }else{
+                us = padre->dato;
+            }
+        }
+        if(padre->derecho && search){
+            us = padre->derecho->getDato();
+            if(us.cod==code){
+                search=false;
+                return padre->derecho->getDato();
+            }else{
+                us = padre->dato;
+            }
+        }
+        if(padre==raiz && search){
+            us = padre->getDato();
+            if(us.cod==code){
+                search=false;
+                return padre->getDato();
+            }
+        }
+        return us;
+    }
+    User us;
+    QString contacts;
+    int size=0;
+    NodoAVL<T> *raiz;
 private:
     enum {IZQUIERDO, DERECHO};
     // Punteros de la lista, para cabeza y nodo actual:
-    NodoAVL<T> *raiz;
+
     NodoAVL<T> *actual;
+
     int contador;
     int altura;
 };

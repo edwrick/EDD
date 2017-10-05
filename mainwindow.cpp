@@ -19,7 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->setColumnCount(5);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
+    ui->rolUserCB->addItem("Administrador");
+    ui->rolUserCB->addItem("Especialista");
+    ui->rolUserCB->addItem("Líder");
+    ui->rolUserCB->addItem("Operativo");
     ui->tableWidget->setStyleSheet("QTableWidget::item{background-color: #EFEBE7;}");
     QTableWidgetItem * protoitem = new QTableWidgetItem("asd");
      protoitem->setTextAlignment(Qt::AlignCenter);
@@ -35,11 +38,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->twFrame->setVisible(false);
     ui->dbFrame->setGeometry(10,50,731,371);
     ui->dbFrame->setVisible(true);
+    ui->prioriActCB->addItem("urgente");
+    ui->prioriActCB->addItem("alta");
+    ui->prioriActCB->addItem("media");
+    ui->prioriActCB->addItem("baja");
+    ui->estadoActCB->addItem("en ejecucion");
+    ui->estadoActCB->addItem("pendiente");
+    ui->estadoActCB->addItem("en pausa");
+    ui->estadoActCB->addItem("finalizada");
+    ui->estadoActCB->addItem("cancelada");
     /*model->setHorizontalHeaderItem(0, new QStandardItem(QString("Column1 Header")));
     model->setHorizontalHeaderItem(1, new QStandardItem(QString("Column2 Header")));
     model->setHorizontalHeaderItem(2, new QStandardItem(QString("Column3 Header")));
 */
-
+    nodito = new NodoOrto();
     arbolAVL = new AVLTree<User>();
     mat = new Matriz();
 }
@@ -63,7 +75,7 @@ void MainWindow::loadDash(){
          ui->tableWidget->item(i+1,0)->setFont( font );
     }
 
-    int z = mat->h->size;
+int z = mat->h->size;
     for(int i=0; i<z;i++){
         QTableWidgetItem *it=new QTableWidgetItem(mat->h->getName(i));
         it->setForeground(QBrush(QColor("#2d1f1a")));
@@ -104,6 +116,25 @@ void MainWindow::loadPro(){
     int longi = mat->l->size;
     for(int i=0;i<longi;i++){
         ui->proProCB->addItem(mat->l->getNameByPos(i));
+    }
+}
+
+void MainWindow::loadUsers(){
+    ui->userCB->clear();
+    QList<QString> users = arbolAVL->getContactList();
+    for(int i=0;i<users.size();i++){
+        ui->userCB->addItem(users[i]);
+        ui->reportUserCB->addItem(users[i]);
+    }
+}
+
+void MainWindow::loadAct(){
+    ui->actList->clear();
+    for(int i=0;i<mat->h->size;i++){
+        ui->twActCB->addItem(mat->h->getName(i));
+    }
+    for(int i=0;i<mat->l->size;i++){
+        ui->proActCB->addItem(mat->l->getTitle(i));
     }
 }
 
@@ -277,6 +308,7 @@ void MainWindow::on_pushButton_11_clicked()
     ui->userFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    loadAct();
 }
 
 void MainWindow::on_pushButton_13_clicked()
@@ -288,6 +320,7 @@ void MainWindow::on_pushButton_13_clicked()
     ui->actFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    loadUsers();
 }
 
 void MainWindow::on_pushButton_12_clicked()
@@ -335,16 +368,6 @@ void MainWindow::on_twCB_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_proProCB_activated(const QString &arg1)
-{
-
-}
-
-void MainWindow::on_proProCB_currentIndexChanged(const QString &arg1)
-{
-
-}
-
 void MainWindow::on_proProCB_currentIndexChanged(int index)
 {
     cout<< "index ahora es: " << index <<endl;
@@ -356,5 +379,111 @@ void MainWindow::on_proProCB_currentIndexChanged(int index)
     ui->txtFinPro->setText(temp->fechaEnd);
     ui->txtEstadoPro->setText(temp->estado);
     ui->txtLiderPro->setText(temp->lider);
-}
     }
+}
+
+void MainWindow::on_userCB_currentIndexChanged(int index)
+{
+    cout<< "index ahora es: " << index <<endl;
+    if(index>=0){
+    QString prueba = ui->userCB->itemText(index);
+    User u = arbolAVL->Buscar(ui->userCB->itemText(index));
+    ui->txtUsername->setText(u.nombre);
+    ui->txtUserLName->setText(u.apellido);
+    ui->txtUsercode->setText(u.cod);
+    ui->txtUsername->setText(u.nombre);
+    ui->txtPswd->setText(u.pswd);
+    ui->txtContractDate->setText(u.fechaC);
+    ui->txtBornDate->setText(u.fecha);
+    ui->txtAnotaUser->setText(u.anota);
+    if(u.rol=="Administrador") ui->rolUserCB->setCurrentIndex(0);
+    if(u.rol=="Especialista") ui->rolUserCB->setCurrentIndex(1);
+    if(u.rol=="Líder") ui->rolUserCB->setCurrentIndex(2);
+    if(u.rol=="Operativo") ui->rolUserCB->setCurrentIndex(3);
+    }
+
+}
+
+void MainWindow::on_proActCB_currentIndexChanged(int index)
+{
+    ui->actList->clear();
+    NodoLat* pro = mat->l->getNodeByTitle(ui->proActCB->itemText(index));
+    NodoHeader* head = mat->h->getNodeByTitle(ui->twActCB->itemText(ui->twActCB->currentIndex()));
+    for(int i=0;i<head->column->size;i++){
+        NodoOrto* temp = head->column->searchByPos(i);
+
+        if(pro->y==temp->y){
+             nodito=temp;
+            for(int j=0;j<temp->listita->size;j++){
+                NodoS* aux= temp->listita->getNodeByPos(j);
+                QString actividad = aux->title +"\r\n"+aux->fechaE+" || Prioridad:"+aux->prioridad;
+                ui->actList->addItem(actividad);
+            }
+        }
+    }
+}
+
+void MainWindow::on_twActCB_currentIndexChanged(int index)
+{
+    ui->actList->clear();
+    NodoLat* pro = mat->l->getNodeByTitle(ui->proActCB->itemText(ui->proActCB->currentIndex()));
+    NodoHeader* head = mat->h->getNodeByTitle(ui->twActCB->itemText(index));
+    for(int i=0;i<head->column->size;i++){
+        NodoOrto* temp = head->column->searchByPos(i);
+
+        if(pro->y==temp->y){
+            nodito=temp;
+            for(int j=0;j<temp->listita->size;j++){
+                NodoS* aux= temp->listita->getNodeByPos(j);
+                QString actividad = aux->title +"\r\n"+aux->fechaE;
+                ui->actList->addItem(actividad);
+            }
+        }
+    }
+}
+
+void MainWindow::on_proProCB_activated(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_proProCB_currentIndexChanged(const QString &arg1)
+{
+
+}
+
+
+
+void MainWindow::on_btnGraphAVL_clicked()
+{
+
+}
+
+
+
+
+
+void MainWindow::on_actList_activated(const QModelIndex &index)
+{
+    QList<QListWidgetItem*> arr = ui->actList->selectedItems();
+    QListWidgetItem* b = arr.at(0);
+    QString todo = b->text();
+    QList<QString> array = todo.split('\n');
+    QList<QString> titlearr = array.at(0).split('\r');
+    QString title = titlearr.at(0);
+    NodoS* act = nodito->listita->getNodeByTitle(title);
+    ui->txtActTitle->setText(act->title);
+    ui->txtActDate->setText(act->fechaE);
+    ui->txtActResp->setText(act->usercode);
+    ui->descActCB->setText(act->desc);
+    if(act->prioridad =="urgente") ui->prioriActCB->setCurrentIndex(0);
+    if(act->prioridad =="alta") ui->prioriActCB->setCurrentIndex(1);
+    if(act->prioridad =="media") ui->prioriActCB->setCurrentIndex(2);
+    if(act->prioridad =="baja") ui->prioriActCB->setCurrentIndex(3);
+    if(act->estado =="en ejecucion") ui->estadoActCB->setCurrentIndex(0);
+    if(act->estado =="pendiente") ui->estadoActCB->setCurrentIndex(1);
+    if(act->estado =="en pausa") ui->estadoActCB->setCurrentIndex(2);
+    if(act->estado =="finalizada") ui->estadoActCB->setCurrentIndex(3);
+    if(act->estado =="cancelada") ui->estadoActCB->setCurrentIndex(4);
+    cout <<"error";
+}

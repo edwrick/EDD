@@ -28,6 +28,8 @@ private slots:
     void loadDash();
     void loadTw();
     void loadPro();
+    void loadUsers();
+    void loadAct();
     void on_pushButton_2_clicked();
 
     void on_pushButton_3_clicked();
@@ -58,8 +60,18 @@ private slots:
 
     void on_proProCB_currentIndexChanged(int index);
 
-private:
+    void on_btnGraphAVL_clicked();
 
+    void on_userCB_currentIndexChanged(int index);
+
+    void on_proActCB_currentIndexChanged(int index);
+
+    void on_twActCB_currentIndexChanged(int index);
+
+    void on_actList_activated(const QModelIndex &index);
+
+private:
+    NodoOrto* nodito;
     Ui::MainWindow *ui;
     AVLTree<User> *arbolAVL;
     Matriz *mat;

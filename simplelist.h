@@ -56,6 +56,30 @@ public:
         size++;
     }
 
+    NodoS* getNodeByPos(int x){
+        if(!Vacia()){
+        NodoS* aux = first;
+        for(int i=0;i<x;i++){
+            aux = aux->next;
+        }
+        return aux;
+        }
+        return NULL;
+
+    }
+    NodoS* getNodeByTitle(QString title){
+        if(!Vacia()){
+        NodoS* aux = first;
+        while(aux){
+            if(aux->title==title) return aux;
+            aux = aux->next;
+        }
+
+        }
+        return NULL;
+
+    }
+
     void addUserCode(QString usercode) {
         NodoS *theNew = new NodoS(usercode);
         if(first==nullptr){
