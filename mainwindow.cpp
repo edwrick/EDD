@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setGeometry(80,80,745,500);
-    ui->tableWidget->setRowCount(5);
-    ui->tableWidget->setColumnCount(5);
+    ui->tableWidget->setRowCount(7);
+    ui->tableWidget->setColumnCount(7);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->rolUserCB->addItem("Administrador");
@@ -37,9 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->horizontalHeader()->setVisible(false);
     ui->tableWidget->setShowGrid(false);
-    ui->tableWidget->setColumnWidth(0,500);
-    ui->tableWidget->setColumnWidth(1,500);
-    ui->tableWidget->setRowCount(15);
     ui->twFrame->setVisible(false);
     ui->dbFrame->setGeometry(10,50,731,371);
     ui->dbFrame->setVisible(true);
@@ -52,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->estadoActCB->addItem("en pausa");
     ui->estadoActCB->addItem("finalizada");
     ui->estadoActCB->addItem("cancelada");
+    ui->tableWidget->horizontalHeader()->setResizeContentsPrecision(QHeaderView::Stretch);
+    ui->tableWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
     /*model->setHorizontalHeaderItem(0, new QStandardItem(QString("Column1 Header")));
     model->setHorizontalHeaderItem(1, new QStandardItem(QString("Column2 Header")));
     model->setHorizontalHeaderItem(2, new QStandardItem(QString("Column3 Header")));
@@ -105,18 +105,58 @@ int z = mat->h->size;
             ui->tableWidget->setItem(y+1,x+1,iti);
         }
     }
+    ui->tableWidget->resizeRowsToContents();
+    ui->tableWidget->resizeColumnsToContents();
 
 }
 
+void MainWindow::loadCTW(){
+    ui->txtCTWDesc->setText("");
+    ui->txtCTWEsp->setText("");
+    ui->txtCTWName->setText("");
+    ui->listCTWMembers->clear();
+    ui->listCTWUsers->clear();
+    if(!arbolAVL->Vacio(arbolAVL->raiz)){
+        QList<QString> users = arbolAVL->usersList();
+        for(int i=0;i<users.size();i++){
+            ui->listCTWUsers->addItem(users[i]);
+        }
+    }
+}
+
+
 void MainWindow::loadTw(){
+    ui->txtTWname->setText("");
+    ui->txtDescTW->setText("");
+    ui->txtEspTW->setText("");
     ui->twCB->clear();
+    ui->listUsersTW->clear();
     int longi = mat->h->size;
     for(int i=0;i<longi;i++){
         ui->twCB->addItem(mat->h->getNameByPos(i));
     }
+    if(!arbolAVL->Vacio(arbolAVL->raiz)){
+        QList<QString> users = arbolAVL->usersList();
+        for(int i=0;i<users.size();i++){
+            bool agregar = true;
+            for(int j = 0; j < ui->listMembersTW->count(); j++)
+            {
+                QListWidgetItem* item = ui->listMembersTW->item(j);
+                if(item->text()==users[i]) agregar = false;
+
+            }
+            if(agregar) ui->listUsersTW->addItem(users[i]);
+
+        }
+    }
 }
 
 void MainWindow::loadPro(){
+    ui->txtTitlePro->setText("");
+    ui->txtDescPro->setText("");
+    ui->txtIniPro->setText("");
+    ui->txtFinPro->setText("");
+    ui->txtDescPro->setText("");
     ui->proProCB->clear();
     int longi = mat->l->size;
     for(int i=0;i<longi;i++){
@@ -125,9 +165,17 @@ void MainWindow::loadPro(){
 }
 
 void MainWindow::loadUsers(){
+    ui->txtUsercode->setText("");
+    ui->txtUsername->setText("");
+    ui->txtUserLName->setText("");
+    ui->txtBornDate->setText("");
+    ui->txtContractDate->setText("");
+    ui->txtPswd->setText("");
+    ui->txtAnotaUser->setText("");
     ui->userCB->clear();
+    ui->reportUserCB->clear();
     if(!arbolAVL->Vacio(arbolAVL->raiz)){
-        QList<QString> users = arbolAVL->getContactList();
+        QList<QString> users = arbolAVL->usersList();
         for(int i=0;i<users.size();i++){
             ui->userCB->addItem(users[i]);
             ui->reportUserCB->addItem(users[i]);
@@ -135,8 +183,38 @@ void MainWindow::loadUsers(){
     }
 
 }
-
+void MainWindow::loadCAct(){
+    ui->txtCActDate->setText("");
+    ui->txtCActDesc->setText("");
+    ui->txtCActResp->setText("");
+    ui->txtCActTitle->setText("");
+    ui->cbCActPro->clear();
+    ui->cbCActTW->clear();
+    ui->cbCActEstado->clear();
+    ui->cbCActPriori->clear();
+    for(int i=0;i<mat->h->size;i++){
+        ui->cbCActTW->addItem(mat->h->getName(i));
+    }
+    for(int i=0;i<mat->l->size;i++){
+        ui->cbCActPro->addItem(mat->l->getTitle(i));
+    }
+    ui->cbCActPriori->addItem("urgente");
+    ui->cbCActPriori->addItem("alta");
+    ui->cbCActPriori->addItem("media");
+    ui->cbCActPriori->addItem("baja");
+    ui->cbCActEstado->addItem("en ejecucion");
+    ui->cbCActEstado->addItem("pendiente");
+    ui->cbCActEstado->addItem("en pausa");
+    ui->cbCActEstado->addItem("finalizada");
+    ui->cbCActEstado->addItem("cancelada");
+}
 void MainWindow::loadAct(){
+    ui->txtActDate->setText("");
+    ui->txtActDesc->setText("");
+    ui->txtActResp->setText("");
+    ui->txtActTitle->setText("");
+    ui->twActCB->clear();
+    ui->proActCB->clear();
     ui->actList->clear();
     for(int i=0;i<mat->h->size;i++){
         ui->twActCB->addItem(mat->h->getName(i));
@@ -148,21 +226,6 @@ void MainWindow::loadAct(){
 
 void MainWindow::on_pushButton_clicked()
 {
-    /*User u("Arnoldo","Lopez","12/10/98",8021,"12/10/2010","Admin","Es gordito","123");
-    arbolAVL->Insertar(u);
-    cout<<"Insertado"<<endl;
-    User u1("Arnoldo","Lopez","12/10/98",9021,"12/10/2010","Admin","Es gordito","123");
-    arbolAVL->Insertar(u1);
-    cout<<"Insertado"<<endl;
-    User u2("Arnoldo","Lopez","12/10/98",9221,"12/10/2010","Admin","Es gordito","123");
-    arbolAVL->Insertar(u2);
-    cout<<"Insertado"<<endl;*/
-
-    /*Teamwork tw("Prograamigos","Somos buenos","456231");
-    mat->h->add("Prograamigos","Somos buenos","456231");
-    cout<<"Fin";
-    cout<<"otra cosa";
-    //asd;*/
     cargarJsonAct();
 }
 
@@ -284,6 +347,20 @@ void MainWindow::on_pushButton_5_clicked()
     ui->tableWidget->setItem(2,2,new QTableWidgetItem("amigos"));
 }
 
+void MainWindow::on_pushButton_6_clicked()
+{
+    ui->actCreatFrame->setGeometry(10,50,731,371);
+    ui->actCreatFrame->setVisible(true);
+    ui->jsonframe->setVisible(false);
+    ui->dbFrame->setVisible(false);
+    ui->userFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    loadCAct();
+}
 void MainWindow::on_pushButton_9_clicked()
 {
     ui->jsonframe->setVisible(false);
@@ -293,29 +370,52 @@ void MainWindow::on_pushButton_9_clicked()
     ui->actFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
     loadDash();
 }
-
+void MainWindow::on_pushButton_7_clicked()
+{
+    ui->CTWFrame->setGeometry(10,50,731,371);
+    ui->CTWFrame->setVisible(true);
+    ui->dbFrame->setVisible(false);
+    ui->jsonframe->setVisible(false);
+    ui->userFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
+    loadCTW();
+}
 void MainWindow::on_pushButton_10_clicked()
 {
     ui->jsonframe->setGeometry(10,120,731,111);
     ui->dbFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
     ui->jsonframe->setVisible(true);
     ui->userFrame->setVisible(false);
     ui->actFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
+
 }
 
 void MainWindow::on_pushButton_11_clicked()
 {
     ui->actFrame->setGeometry(10,50,731,371);
     ui->actFrame->setVisible(true);
+    ui->CTWFrame->setVisible(false);
     ui->dbFrame->setVisible(false);
     ui->jsonframe->setVisible(false);
     ui->userFrame->setVisible(false);
     ui->proFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
     loadAct();
 }
 
@@ -327,7 +427,10 @@ void MainWindow::on_pushButton_13_clicked()
     ui->dbFrame->setVisible(false);
     ui->actFrame->setVisible(false);
     ui->proFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
     loadUsers();
 }
 
@@ -338,8 +441,11 @@ void MainWindow::on_pushButton_12_clicked()
     ui->userFrame->setVisible(false);
     ui->jsonframe->setVisible(false);
     ui->dbFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
     ui->actFrame->setVisible(false);
     ui->twFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
     loadPro();
 }
 
@@ -349,20 +455,29 @@ void MainWindow::on_pushButton_14_clicked()
     ui->twFrame->setVisible(true);
     ui->proFrame->setVisible(false);
     ui->userFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
     ui->jsonframe->setVisible(false);
     ui->dbFrame->setVisible(false);
     ui->actFrame->setVisible(false);
+    ui->CProFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
     loadTw();
 }
 
 void MainWindow::on_btnSaveTW_clicked()
 {
-
+    QString teamname = ui->twCB->currentText();
+    NodoHeader*aux = mat->h->search( mat->h->searchWTitle( teamname));
+    aux->code= ui->txtEspTW->text();
+    aux->nombre= ui->txtTWname->text();
+    aux->desc= ui->txtDescTW->toPlainText();
+    loadTw();
 }
 
 void MainWindow::on_twCB_currentIndexChanged(int index)
 {
     ui->listMembersTW->clear();
+    ui->listUsersTW->clear();
     cout<< "index ahora es: " << index <<endl;
     if(index>=1){
     NodoHeader* temp = mat->h->getNodeByTitle(ui->twCB->itemText(index));
@@ -373,6 +488,20 @@ void MainWindow::on_twCB_currentIndexChanged(int index)
     for(int i=0;i<longi;i++){
         ui->listMembersTW->addItem(temp->listita->getCodeByPos(i));
     }
+    }
+    if(!arbolAVL->Vacio(arbolAVL->raiz)){
+        QList<QString> users = arbolAVL->usersList();
+        for(int i=0;i<users.size();i++){
+            bool agregar = true;
+            for(int j = 0; j < ui->listMembersTW->count(); ++j)
+            {
+                QListWidgetItem* item = ui->listMembersTW->item(j);
+                if(item->text()==users[i]) agregar = false;
+
+            }
+            if(agregar) ui->listUsersTW->addItem(users[i]);
+
+        }
     }
 }
 
@@ -415,6 +544,7 @@ void MainWindow::on_userCB_currentIndexChanged(int index)
 void MainWindow::on_proActCB_currentIndexChanged(int index)
 {
     ui->actList->clear();
+    if(index>=1){
     NodoLat* pro = mat->l->getNodeByTitle(ui->proActCB->itemText(index));
     NodoHeader* head = mat->h->getNodeByTitle(ui->twActCB->itemText(ui->twActCB->currentIndex()));
     for(int i=0;i<head->column->size;i++){
@@ -429,13 +559,15 @@ void MainWindow::on_proActCB_currentIndexChanged(int index)
             }
         }
     }
+    }
 }
 
 void MainWindow::on_twActCB_currentIndexChanged(int index)
-{
-    ui->actList->clear();
-    NodoLat* pro = mat->l->getNodeByTitle(ui->proActCB->itemText(ui->proActCB->currentIndex()));
-    NodoHeader* head = mat->h->getNodeByTitle(ui->twActCB->itemText(index));
+{ui->actList->clear();
+    if(index>=1){
+
+    NodoLat* pro = mat->l->getNodeByTitle(ui->proActCB->currentText());
+    NodoHeader* head = mat->h->getNodeByTitle(ui->twActCB->currentText());
     for(int i=0;i<head->column->size;i++){
         NodoOrto* temp = head->column->searchByPos(i);
 
@@ -447,6 +579,7 @@ void MainWindow::on_twActCB_currentIndexChanged(int index)
                 ui->actList->addItem(actividad);
             }
         }
+    }
     }
 }
 
@@ -523,7 +656,7 @@ void MainWindow::on_actList_activated(const QModelIndex &index)
     ui->txtActTitle->setText(act->title);
     ui->txtActDate->setText(act->fechaE);
     ui->txtActResp->setText(act->usercode);
-    ui->descActCB->setText(act->desc);
+    ui->txtDescPro->setText(act->desc);
     if(act->prioridad =="urgente") ui->prioriActCB->setCurrentIndex(0);
     if(act->prioridad =="alta") ui->prioriActCB->setCurrentIndex(1);
     if(act->prioridad =="media") ui->prioriActCB->setCurrentIndex(2);
@@ -539,4 +672,146 @@ void MainWindow::on_actList_activated(const QModelIndex &index)
 void MainWindow::on_btnPDFUser_clicked()
 {
     drawPDF();
+}
+
+void MainWindow::on_twCB_activated(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_btnQuitMembers_clicked()
+{
+    QListWidgetItem* it  = ui->listMembersTW->currentItem();
+    QString texto = it->text();
+    QString teamname = ui->twCB->currentText();
+    NodoHeader*aux = mat->h->search( mat->h->searchWTitle( teamname));
+    NodoS* sd = aux->listita->getNodeUCode(texto);
+    aux->listita->borrar(sd);
+    loadTw();
+    cout <<"hola";
+}
+
+void MainWindow::on_btnAddMembers_clicked()
+{
+    QListWidgetItem* it  = ui->listUsersTW->currentItem();
+    QString texto = it->text();
+    NodoHeader*aux = mat->h->search( mat->h->searchWTitle( ui->twCB->currentText()));
+    aux->listita->addUserCode(texto);
+    loadTw();
+}
+
+void MainWindow::on_pushButton_17_clicked()
+{
+    NodoLat* aux = mat->l->getNodeByTitle( ui->proProCB->currentText());
+    aux->title = ui->txtTitlePro->text();
+    aux->fechaini= ui->txtIniPro->text();
+    aux->fechaEnd = ui->txtFinPro->text();
+    aux->desc = ui->txtDescPro->toPlainText();
+    aux->lider=ui->txtLiderPro->text();
+    loadPro();
+}
+
+void MainWindow::on_btnUserSave_clicked()
+{
+    NodoAVL<User>* aux = arbolAVL->getNode(ui->userCB->currentText());
+    User u(ui->txtUsername->text(),ui->txtUserLName->text(),ui->txtBornDate->text(),ui->txtUsercode->text(),ui->txtContractDate->text(),ui->rolUserCB->currentText(),ui->txtAnotaUser->toPlainText(),ui->txtPswd->text(),"newmail");
+    aux->dato = u;
+    loadUsers();
+}
+
+void MainWindow::on_btnUserDelete_clicked()
+{
+    NodoAVL<User>* aux = arbolAVL->getNode(ui->userCB->currentText());
+    User u = aux->dato;
+    arbolAVL->Borrar(arbolAVL->getNode(u.cod));
+    loadUsers();
+}
+
+void MainWindow::on_pushButton_15_clicked()
+{
+    QList<QListWidgetItem*> arr = ui->actList->selectedItems();
+    QListWidgetItem* b = arr.at(0);
+    QString todo = b->text();
+    QList<QString> array = todo.split('\n');
+    QList<QString> titlearr = array.at(0).split('\r');
+    QString title = titlearr.at(0);
+    NodoHeader* head = mat->h->getNodeByTitle( ui->twActCB->currentText());
+    NodoLat * lat = mat->l->getNodeByTitle(ui->proActCB->currentText());
+    NodoOrto* nodo = mat->search(head->x,lat->y);
+    NodoS* act = nodo->listita->getNodeByTitle(title);
+    act->title = ui->txtActTitle->text();
+    act->estado =ui->estadoActCB->currentText();
+    act->fechaE = ui->txtActDate->text();
+    act->desc = ui->txtActDesc->toPlainText();
+    act->prioridad = ui->prioriActCB->currentText();
+    loadAct();
+}
+
+void MainWindow::on_btnActKill_clicked()
+{
+    QList<QListWidgetItem*> arr = ui->actList->selectedItems();
+    QListWidgetItem* b = arr.at(0);
+    QString todo = b->text();
+    QList<QString> array = todo.split('\n');
+    QList<QString> titlearr = array.at(0).split('\r');
+    QString title = titlearr.at(0);
+    NodoHeader* head = mat->h->getNodeByTitle( ui->twActCB->currentText());
+    NodoLat * lat = mat->l->getNodeByTitle(ui->proActCB->currentText());
+    NodoOrto* nodo = mat->search(head->x,lat->y);
+    NodoS* act = nodo->listita->getNodeByTitle(title);
+    nodo->listita->borrar(act);
+    loadAct();
+}
+
+
+
+void MainWindow::on_btnActKill_2_clicked()
+{
+    NodoHeader* head = mat->h->getNodeByTitle( ui->cbCActTW->currentText());
+    NodoLat * lat = mat->l->getNodeByTitle(ui->cbCActPro->currentText());
+    NodoOrto* nodo = mat->search(head->x,lat->y);
+    nodo->listita->add(ui->txtCActTitle->text(),ui->txtCActDesc->toPlainText(),ui->txtCActDate->text(),ui->cbCActPriori->currentText(),ui->cbCActPriori->currentText(),ui->txtCActResp->text());
+    loadCAct();
+}
+
+
+
+void MainWindow::on_btnAddMembers_2_clicked()
+{
+    QListWidgetItem* it  = ui->listCTWUsers->currentItem();
+    QString texto = it->text();
+    ui->listCTWMembers->addItem(texto);
+
+}
+
+void MainWindow::on_btnSaveTW_2_clicked()
+{
+    mat->h->add(ui->txtCTWName->text(),ui->txtCTWDesc->toPlainText(),ui->txtCTWEsp->text());
+    loadCTW();
+}
+
+void MainWindow::on_pushButton_18_clicked()
+{
+    mat->l->add(ui->txtCProTitle->text(),ui->txtCProDesc->toPlainText(),ui->txtCProIni->text(),ui->txtCProFin->text(),ui->txtCProEstado->text(),ui->txtCProLider->text());
+    ui->txtCProDesc->setText("");
+    ui->txtCProEstado->setText("");
+    ui->txtCProFin->setText("");
+    ui->txtCProIni->setText("");
+    ui->txtCProLider->setText("");
+    ui->txtCProTitle->setText("");
+
+}
+
+void MainWindow::on_pushButton_8_clicked()
+{
+    ui->CProFrame->setVisible(true);
+    ui->CProFrame->setGeometry(10,50,731,371);
+    ui->dbFrame->setVisible(false);
+    ui->CTWFrame->setVisible(false);
+    ui->jsonframe->setVisible(false);
+    ui->userFrame->setVisible(false);
+    ui->actFrame->setVisible(false);
+    ui->proFrame->setVisible(false);
+    ui->twFrame->setVisible(false);
+    ui->actCreatFrame->setVisible(false);
 }

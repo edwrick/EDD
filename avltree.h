@@ -23,6 +23,8 @@ public:
     }
     ~AVLTree() { Podar(raiz); }
 
+    bool EsHoja(NodoAVL<T> *r) { return !r->derecho && !r->izquierdo; }
+
     bool Vacio(NodoAVL<T> *r) { return r==NULL; }
 
     void Podar(NodoAVL<T>* &nodo)
@@ -253,7 +255,7 @@ public:
     }
 
     // Eliminar un elemento de un �rbol AVL
-    void Borrar(const T dat)
+    void Borrar(NodoAVL<T> * nododel)
     {
        NodoAVL<T> *padre = NULL;
        NodoAVL<T> *nodo;
@@ -262,7 +264,7 @@ public:
        actual = raiz;
        // Mientras sea posible que el valor est� en el �rbol
        while(!Vacio(actual)) {
-          if(dat == actual->dato) { // Si el valor est� en el nodo actual
+          if(nododel == actual) { // Si el valor est� en el nodo actual
              if(EsHoja(actual)) { // Y si adem�s es un nodo hoja: lo borramos
                 if(padre) // Si tiene padre (no es el nodo raiz)
                    // Anulamos el puntero que le hace referencia
@@ -306,18 +308,22 @@ public:
                 // y continuar, cerrando el bucle. El nodo encontrado no tiene
                 // por qu� ser un nodo hoja, cerrando el bucle nos aseguramos
                 // de que s�lo se eliminan nodos hoja.
-                aux = actual->dato;
+                User udata;
+                udata = actual->dato;
                 actual->dato = nodo->dato;
-                nodo->dato = aux;
+                nodo->dato = udata;
                 actual = nodo;
              }
           }
           else { // Todav�a no hemos encontrado el valor, seguir busc�ndolo
              padre = actual;
-             if(dat > actual->dato) actual = actual->derecho;
-             else if(dat < actual->dato) actual = actual->izquierdo;
+             User udata = actual->dato;
+             User odata = nododel->dato;
+             if(odata.cod > udata.cod) actual = actual->derecho;
+             else if(odata.cod < udata.cod) actual = actual->izquierdo;
           }
        }
+       size--;
     }
 
     QList<QString> getContactList(){
@@ -367,6 +373,53 @@ public:
        User nu("null");
        return nu; // No est� en �rbol
     }
+    NodoAVL<T>* getNode(QString code)
+    {
+       actual = raiz;
+       // Todav�a puede aparecer, ya que quedan nodos por mirar
+       while(!Vacio(actual)) {
+          us = actual->dato;
+          if(code == us.cod) return actual; // dato encontrado
+          else if(code > us.cod) actual = actual->derecho; // Seguir
+          else if(code < us.cod) actual = actual->izquierdo;
+       }
+       User nu("null");
+       return NULL; // No est� en �rbol
+    }
+
+    QList<QString> usersList(){
+        texto="";
+        loadUsers(raiz);
+        QList<QString> lista = texto.split(',');
+        int a = lista.size();
+        User u = raiz->dato;
+        lista[a-1]=u.cod;
+        return lista;
+
+    }
+
+    void loadUsers(NodoAVL<T>* padre){
+
+        if(padre->izquierdo && padre->derecho){
+            User uder = padre->derecho->dato;
+            User uiz = padre->izquierdo->dato;
+            texto += uder.cod+","+uiz.cod+",";
+            loadUsers(padre->izquierdo);
+            loadUsers(padre->derecho);
+        }else{
+            if(padre->izquierdo){
+                User uiz = padre->izquierdo->dato;
+                texto += uiz.cod+",";
+                loadUsers(padre->izquierdo);
+            }
+            if(padre->derecho){
+                User uder = padre->derecho->dato;
+                texto += uder.cod+",";
+                loadUsers(padre->derecho);
+            }
+        }
+
+    }
 
     void graphAVL(NodoAVL<T>* padre)
     {
@@ -399,6 +452,7 @@ public:
         void pruebaGraph(){
 
         qDebug()<<"\nGenerar grafica: ";
+        texto="digraph G{ rankdir= \"LR\" \n";
         if(raiz!=NULL){
            graphAVL(raiz);
         }
@@ -451,7 +505,7 @@ public:
     QString contacts;
     int size=0;
     NodoAVL<T> *raiz;
-    QString texto="digraph G{ rankdir= \"LR\" \n";
+    QString texto;
 private:
     enum {IZQUIERDO, DERECHO};
     // Punteros de la lista, para cabeza y nodo actual:

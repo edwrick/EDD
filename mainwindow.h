@@ -31,6 +31,8 @@ private slots:
     void loadPro();
     void loadUsers();
     void loadAct();
+    void loadCAct();
+    void loadCTW();
     void on_pushButton_2_clicked();
 
     void on_pushButton_3_clicked();
@@ -72,6 +74,36 @@ private slots:
     void on_actList_activated(const QModelIndex &index);
 
     void on_btnPDFUser_clicked();
+
+    void on_twCB_activated(const QString &arg1);
+
+    void on_btnQuitMembers_clicked();
+
+    void on_btnAddMembers_clicked();
+
+    void on_pushButton_17_clicked();
+
+    void on_btnUserSave_clicked();
+
+    void on_btnUserDelete_clicked();
+
+    void on_pushButton_15_clicked();
+
+    void on_btnActKill_clicked();
+
+    void on_pushButton_6_clicked();
+
+    void on_btnActKill_2_clicked();
+
+    void on_pushButton_7_clicked();
+
+    void on_btnAddMembers_2_clicked();
+
+    void on_btnSaveTW_2_clicked();
+
+    void on_pushButton_18_clicked();
+
+    void on_pushButton_8_clicked();
 
 private:
     NodoOrto* nodito;

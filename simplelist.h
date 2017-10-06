@@ -39,6 +39,49 @@ public:
     /*
      * Inserta un nuevo nodo al inicio de la lista
      */
+
+    void borrar(NodoS* nodo){
+        sup_en_lista(nodo);
+    }
+    int sup_inicio (){
+      if (size == 0)
+        return -1;
+      NodoS *sup_elemento;
+      sup_elemento = first;
+      first = first->next;
+      if (size == 1) first = NULL;
+      size--;
+      return 0;
+    }
+    int sup_en_lista (NodoS *nodo){
+
+      NodoS *actual;
+      NodoS *sup_elemento;
+      actual = first;
+      if(size==1){
+          first=NULL;
+          size=0;
+          return 0;
+      }
+      if(nodo==first){
+          first=first->next;
+          size--;
+          return 0;
+      }
+      while(actual!=nodo){
+          sup_elemento=actual;
+          actual=actual->next;
+      }
+      if(actual->next){
+      sup_elemento->next=actual->next;
+      size--;
+      return 0;
+      }else{
+          sup_elemento->next=NULL;
+          size--;
+          return 0;
+      }
+    }
     void add(QString title,QString desc,QString fechaE,QString prioridad,QString estado,QString usercode) {
         NodoS *theNew = new NodoS(title,desc,fechaE,prioridad,estado,usercode);
         if(first==nullptr){
@@ -72,6 +115,18 @@ public:
         NodoS* aux = first;
         while(aux){
             if(aux->title==title) return aux;
+            aux = aux->next;
+        }
+
+        }
+        return NULL;
+
+    }
+    NodoS* getNodeUCode(QString code){
+        if(!Vacia()){
+        NodoS* aux = first;
+        while(aux){
+            if(aux->usercode==code) return aux;
             aux = aux->next;
         }
 

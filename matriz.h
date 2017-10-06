@@ -28,7 +28,10 @@ public:
         NodoHeader* tempH;
         tempH = h->search(x);
         NodoOrto* temp = tempH->column->get(y);
-        return tempH->column->get(y);
+        if(!temp){ insert(x,y,"Tarea");
+        tempH = h->search(x);
+        temp = tempH->column->get(y);}
+        return temp;
     }
 
     void fill(int x, int y){
